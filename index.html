@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Painel Interativo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .dashboard {
+            width: 100%;
+            max-width: 800px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        h1 { color: #333; font-size: 24px; }
+        .menu-botoes {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .menu-botoes button {
+            padding: 10px 15px;
+            border: none;
+            background-color: #007BFF;
+            color: white;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .menu-botoes button:hover {
+            background-color: #0056b3;
+        }
+        .secao {
+            display: none;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background: #fafafa;
+        }
+        .secao.ativa {
+            display: block;
+        }
+        .contador-box {
+            margin-top: 15px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="dashboard">
+        <h1>Painel de Controle</h1>
+        
+        <!-- Botões do Menu -->
+        <div class="menu-botoes">
+            <button onclick="mudarSecao('inicio')">Início</button>
+            <button onclick="mudarSecao('ferramentas')">Ferramentas</button>
+            <button onclick="mudarSecao('status')">Status</button>
+        </div>
+
+        <!-- Seção 1: Início -->
+        <div id="inicio" class="secao ativa">
+            <h3>Bem-vindo ao seu painel!</h3>
+            <p>Este painel agora está funcional. Use o menu acima para navegar entre as abas.</p>
+        </div>
+
+        <!-- Seção 2: Ferramentas (Com interatividade de clique) -->
+        <div id="ferramentas" class="secao">
+            <h3>Área de Teste de Ações</h3>
+            <p>Clique no botão abaixo para testar o funcionamento do JavaScript:</p>
+            <button onclick="incrementarContador()" style="padding: 8px 12px; background: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer;">Clique Aqui</button>
+            <div class="contador-box">Cliques registrados: <span id="contador">0</span></div>
+        </div>
+
+        <!-- Seção 3: Status -->
+        <div id="status" class="secao">
+            <h3>Status do Sistema</h3>
+            <p>🟢 Sistema online e operando perfeitamente.</p>
+        </div>
+    </div>
+
+    <script>
+        // Função para alternar entre as abas do painel
+        function mudarSecao(idSecao) {
+            const secoes = document.querySelectorAll('.secao');
+            secoes.forEach(secao => {
+                secao.classList.remove('ativa');
+            });
+            document.getElementById(idSecao).classList.add('ativa');
+        }
+
+        // Função do contador interativo
+        let cliques = 0;
+        function incrementarContador() {
+            cliques++;
+            document.getElementById('contador').innerText = cliques;
+        }
+    </script>
+
+</body>
+</html>
