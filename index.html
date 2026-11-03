@@ -2,596 +2,164 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>FREE FIRE PRO PANEL</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>GRXSENSI ENGINE - VIP CALIBRATION</title>
     <style>
-        :root {
-            --bg-dark: #090a0f;
-            --panel-bg: rgba(13, 17, 23, 0.85);
-            --border-glow: rgba(0, 243, 255, 0.4);
-            --neon-blue: #00f3ff;
-            --neon-red: #ff0055;
-            --text-main: #ffffff;
-            --text-muted: #8b9bb4;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        body {
-            background-color: var(--bg-dark);
-            background-image: 
-                radial-gradient(circle at 10% 20%, rgba(255, 0, 85, 0.1) 0%, transparent 40%),
-                radial-gradient(circle at 90% 80%, rgba(0, 243, 255, 0.1) 0%, transparent 40%);
-            color: var(--text-main);
-            height: 100vh;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        /* Simulador de Tela do iPhone */
-        .iphone-frame {
-            width: 100vw;
-            height: 100vh;
-            max-width: 430px;
-            max-height: 932px;
-            position: relative;
-            overflow: hidden;
-            border: none;
-            background: rgba(5, 5, 8, 0.5);
-        }
-
-        @media (min-width: 480px) {
-            .iphone-frame {
-                border: 12px solid #222;
-                border-radius: 50px;
-                height: 850px;
-                box-shadow: 0 25px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(0, 243, 255, 0.1);
-            }
-        }
-
-        /* Arena Simulada de Fundo */
-        .game-arena {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, #121629 0%, #05070a 100%);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-        }
-
-        .radar-grid {
-            position: absolute;
-            width: 200%;
-            height: 200%;
-            background-image: 
-                linear-gradient(rgba(0, 243, 255, 0.05) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 243, 255, 0.05) 1px, transparent 1px);
-            background-size: 40px 40px;
-            animation: gridMove 20s linear infinite;
-        }
-
-        @keyframes gridMove {
-            0% { transform: translate(0, 0); }
-            100% { transform: translate(40px, 40px); }
-        }
-
-        /* Alvos ESP Simulados */
-        .esp-target {
-            position: absolute;
-            width: 40px;
-            height: 60px;
-            border: 1px dashed var(--neon-red);
-            background: rgba(255, 0, 85, 0.05);
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: space-between;
-            transition: all 0.3s ease;
-        }
-
-        .esp-target.active {
-            display: flex;
-        }
-
-        .esp-tag {
-            font-size: 9px;
-            background: rgba(255, 0, 85, 0.8);
-            color: white;
-            padding: 1px 4px;
-            border-radius: 2px;
-            white-space: nowrap;
-            margin-top: -15px;
-        }
-
-        /* Botão Flutuante (Floating Icon) */
-        .float-btn {
-            position: absolute;
-            top: 60px;
-            left: 20px;
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(135deg, var(--neon-blue), #0066ff);
-            border-radius: 16px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 0 15px rgba(0, 243, 255, 0.5);
-            cursor: pointer;
-            z-index: 1000;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .float-btn:active {
-            transform: scale(0.9);
-        }
-
-        .float-btn svg {
-            width: 24px;
-            height: 24px;
-            fill: white;
-        }
-
-        /* Painel Principal */
-        .pro-panel {
-            position: absolute;
-            top: 120px;
-            left: 20px;
-            right: 20px;
-            bottom: 40px;
-            background: var(--panel-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--border-glow);
-            border-radius: 24px;
-            display: flex;
-            flex-direction: column;
-            z-index: 999;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), inset 0 0 15px rgba(0, 243, 255, 0.05);
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            opacity: 1;
-            transform: scale(1);
-        }
-
-        .pro-panel.hidden {
-            opacity: 0;
-            transform: scale(0.9) translateY(-20px);
-            pointer-events: none;
-        }
-
-        /* Cabeçalho do Painel */
-        .panel-header {
-            padding: 16px 20px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .panel-title {
-            font-size: 14px;
-            font-weight: 800;
-            letter-spacing: 1.5px;
-            background: linear-gradient(90deg, var(--neon-blue), var(--neon-red));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-transform: uppercase;
-        }
-
-        .close-panel {
-            background: none;
-            border: none;
-            color: var(--text-muted);
-            font-size: 18px;
-            cursor: pointer;
-        }
-
-        /* Abas de Navegação */
-        .panel-tabs {
-            display: flex;
-            padding: 10px 16px;
-            gap: 8px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .tab-btn {
-            flex: 1;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            padding: 8px;
-            border-radius: 10px;
-            color: var(--text-muted);
-            font-size: 11px;
-            font-weight: 600;
-            text-transform: uppercase;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .tab-btn.active {
-            background: rgba(0, 243, 255, 0.1);
-            border-color: var(--neon-blue);
-            color: var(--neon-blue);
-            box-shadow: 0 0 10px rgba(0, 243, 255, 0.2);
-        }
-
-        /* Conteúdo das Abas */
-        .panel-body {
-            flex: 1;
-            overflow-y: auto;
-            padding: 16px;
-        }
-
-        .tab-content {
-            display: none;
-            animation: fadeIn 0.3s ease;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(4px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Componentes de Controle */
-        .control-group {
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 14px;
-            padding: 14px;
-            margin-bottom: 12px;
-        }
-
-        .control-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-
-        .control-row:last-child {
-            margin-bottom: 0;
-        }
-
-        .control-label {
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--text-main);
-        }
-
-        .control-desc {
-            font-size: 10px;
-            color: var(--text-muted);
-            margin-top: 2px;
-        }
-
-        /* Switch ON/OFF Customizado */
-        .switch {
-            position: relative;
-            display: inline-block;
-            width: 44px;
-            height: 24px;
-        }
-
-        .switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background-color: rgba(255, 255, 255, 0.1);
-            transition: .3s;
-            border-radius: 24px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 18px;
-            width: 18px;
-            left: 2px;
-            bottom: 2px;
-            background-color: white;
-            transition: .3s;
-            border-radius: 50%;
-        }
-
-        input:checked + .slider {
-            background-color: var(--neon-red);
-            border-color: var(--neon-red);
-            box-shadow: 0 0 10px rgba(255, 0, 85, 0.5);
-        }
-
-        input:checked + .slider:before {
-            transform: translateX(20px);
-        }
-
-        /* Range Slider Customizado */
-        .range-slider {
-            width: 100%;
-            margin-top: 8px;
-            appearance: none;
-            background: rgba(255, 255, 255, 0.1);
-            height: 6px;
-            border-radius: 3px;
-            outline: none;
-        }
-
-        .range-slider::-webkit-slider-thumb {
-            appearance: none;
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            background: var(--neon-blue);
-            cursor: pointer;
-            box-shadow: 0 0 8px var(--neon-blue);
-        }
-
-        /* Seletor de Opções (Chips) */
-        .chip-group {
-            display: flex;
-            gap: 6px;
-            margin-top: 8px;
-        }
-
-        .chip {
-            flex: 1;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            padding: 6px;
-            border-radius: 8px;
-            text-align: center;
-            font-size: 10px;
-            font-weight: 600;
-            color: var(--text-muted);
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .chip.selected {
-            background: rgba(0, 243, 255, 0.15);
-            border-color: var(--neon-blue);
-            color: var(--neon-blue);
-        }
-
-        /* Status Rodapé */
-        .panel-footer {
-            padding: 10px 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            font-size: 9px;
-            color: var(--text-muted);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .status-dot {
-            width: 6px;
-            height: 6px;
-            background-color: #00ff66;
-            border-radius: 50%;
-            display: inline-block;
-            box-shadow: 0 0 6px #00ff66;
-            margin-right: 4px;
-        }
+        :root { --bg: #030508; --blue: #00b4db; --cyan: #00f5ff; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: monospace; user-select: none; }
+        body { background: var(--bg); background-color: var(--bg); color: #fff; height: 100vh; display: flex; justify-content: center; align-items: center; overflow: hidden; }
+        #login { position: fixed; inset: 0; background: var(--bg); display: flex; justify-content: center; align-items: center; z-index: 999; padding: 20px; }
+        .box { width: 100%; max-width: 340px; background: rgba(3,5,8,0.95); border: 2px solid var(--blue); box-shadow: 0 0 15px rgba(0,180,219,0.5); padding: 25px; border-radius: 10px; text-align: center; }
+        .box h1 { color: var(--cyan); font-size: 22px; margin-bottom: 20px; text-shadow: 0 0 8px var(--cyan); }
+        .inp { width: 100%; padding: 12px; background: #000; border: 1px solid var(--blue); color: var(--cyan); font-size: 15px; text-align: center; border-radius: 6px; margin-bottom: 12px; outline: none; }
+        .btn { width: 100%; padding: 12px; background: linear-gradient(45deg, #0077b6, var(--blue)); border: none; color: #fff; font-weight: bold; border-radius: 6px; cursor: pointer; box-shadow: 0 0 10px rgba(0,180,219,0.5); }
+        .err { color: #ff3366; font-size: 12px; margin-top: 10px; display: none; }
+        #menu { display: none; width: 100%; max-width: 380px; height: 88vh; max-height: 680px; background: rgba(3,5,8,0.98); border: 2px solid var(--blue); box-shadow: 0 0 20px rgba(0,180,219,0.6); border-radius: 12px; flex-direction: column; overflow: hidden; }
+        .hdr { padding: 12px; background: rgba(0,180,219,0.1); border-bottom: 1px solid var(--blue); text-align: center; }
+        .hdr h2 { color: var(--cyan); font-size: 16px; text-shadow: 0 0 6px var(--cyan); }
+        .hdr p { font-size: 9px; color: #8ab4f8; margin-top: 3px; }
+        .tabs { display: flex; background: #000; border-bottom: 1px solid var(--blue); }
+        .tb { flex: 1; padding: 10px 4px; background: none; border: none; color: #666; font-size: 11px; font-weight: bold; cursor: pointer; border-bottom: 2px solid transparent; }
+        .tb.active { color: var(--cyan); border-bottom: 2px solid var(--cyan); background: rgba(0,245,255,0.05); }
+        .cnt { flex: 1; overflow-y: auto; padding: 12px; display: none; flex-direction: column; gap: 12px; }
+        .cnt.active { display: flex; }
+        .group { background: rgba(0,180,219,0.03); border: 1px solid rgba(0,180,219,0.3); padding: 10px; border-radius: 6px; }
+        .lbl { font-size: 11px; color: #fff; margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center; }
+        .desc { font-size: 9px; color: #aaa; margin-top: 3px; }
+        .switch { position: relative; display: inline-block; width: 40px; height: 20px; flex-shrink: 0; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; inset: 0; background: #111; transition: .3s; border: 1px solid var(--blue); border-radius: 20px; }
+        .slider:before { position: absolute; content: ""; height: 14px; width: 14px; left: 2px; bottom: 2px; background: #666; transition: .3s; border-radius: 50%; }
+        input:checked + .slider { background: rgba(0,180,219,0.4); box-shadow: 0 0 6px var(--blue); }
+        input:checked + .slider:before { transform: translateX(20px); background: var(--cyan); box-shadow: 0 0 4px var(--cyan); }
+        .range { width: 100%; accent-color: var(--cyan); margin-top: 6px; }
+        .sel, .txt { width: 100%; padding: 8px; background: #000; border: 1px solid var(--blue); color: var(--cyan); font-size: 11px; border-radius: 4px; margin-top: 5px; outline: none; }
+        .abtn { width: 100%; padding: 10px; background: linear-gradient(45deg, #005f73, var(--blue)); border: 1px solid var(--cyan); color: #fff; font-weight: bold; font-size: 11px; border-radius: 6px; cursor: pointer; text-align: center; }
+        #scan { position: absolute; inset: 0; background: rgba(3,5,8,0.97); z-index: 10; display: none; flex-direction: column; justify-content: center; align-items: center; padding: 20px; text-align: center; }
+        .stxt { color: var(--cyan); font-size: 12px; margin-bottom: 15px; text-shadow: 0 0 6px var(--cyan); }
+        .pbar-c { width: 100%; height: 6px; background: #111; border: 1px solid var(--blue); border-radius: 3px; overflow: hidden; }
+        .pbar { width: 0%; height: 100%; background: var(--cyan); box-shadow: 0 0 8px var(--cyan); transition: width 0.05s linear; }
+        .res { background: rgba(0,245,255,0.05); border: 1px dashed var(--cyan); padding: 8px; border-radius: 4px; font-size: 10px; color: #a5f3fc; display: none; margin-top: 8px; line-height: 1.4; }
+        .logs { background: #012004; border: 1px solid rgba(0,245,255,0.3); border-radius: 4px; padding: 8px; font-size: 9px; color: #00ffcc; height: 100px; overflow-y: auto; }
+        .lline { margin-bottom: 3px; }
     </style>
 </head>
 <body>
-
-    <div class="iphone-frame">
-        <!-- Arena de Simulação Visual -->
-        <div class="game-arena">
-            <div class="radar-grid"></div>
-            <!-- Alvos simulados para o ESP -->
-            <div class="esp-target" id="target1" style="top: 30%; left: 40%;">
-                <span class="esp-tag">BOT_01 [15m]</span>
-            </div>
-            <div class="esp-target" id="target2" style="top: 60%; left: 70%;">
-                <span class="esp-tag">PLAYER [42m]</span>
-            </div>
-        </div>
-
-        <!-- Botão Flutuante (Menu Toggle) -->
-        <div class="float-btn" id="floatBtn" onclick="togglePanel()">
-            <svg viewBox="0 0 24 24">
-                <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
-            </svg>
-        </div>
-
-        <!-- Painel Pro Flutuante -->
-        <div class="pro-panel" id="proPanel">
-            <div class="panel-header">
-                <span class="panel-title">Free Fire Pro Panel</span>
-                <button class="close-panel" onclick="togglePanel()">&times;</button>
-            </div>
-
-            <!-- Navegação por Abas -->
-            <div class="panel-tabs">
-                <button class="tab-btn active" onclick="switchTab(event, 'aimbot')">Aimbot</button>
-                <button class="tab-btn" onclick="switchTab(event, 'esp')">ESP</button>
-                <button class="tab-btn" onclick="switchTab(event, 'recoil')">Recoil</button>
-            </div>
-
-            <!-- Corpo do Painel -->
-            <div class="panel-body">
-                
-                <!-- ABA 1: AIMBOT -->
-                <div class="tab-content active" id="aimbot">
-                    <div class="control-group">
-                        <div class="control-row">
-                            <div>
-                                <div class="control-label">Ativar Aimbot</div>
-                                <div class="control-desc">Auxílio inteligente de mira</div>
-                            </div>
-                            <label class="switch">
-                                <input type="checkbox" id="aimbotToggle" onchange="updateAimbotState()">
-                                <span class="slider"></span>
-                            </label>
-                        </div>
-                    </div>
-
-                    <div class="control-group">
-                        <div class="control-row">
-                            <div>
-                                <div class="control-label">Sensibilidade de Mira</div>
-                                <div class="control-desc" id="sensValue">Valor: 50%</div>
-                            </div>
-                        </div>
-                        <input type="range" min="1" max="100" value="50" class="range-slider" oninput="updateSens(this.value)">
-                    </div>
-
-                    <div class="control-group">
-                        <div class="control-label" style="margin-bottom: 8px;">Área de Alvo</div>
-                        <div class="chip-group">
-                            <div class="chip selected" onclick="selectChip(this, 'aim')">Cabeça</div>
-                            <div class="chip" onclick="selectChip(this, 'aim')">Peito</div>
-                            <div class="chip" onclick="selectChip(this, 'aim')">Pescoço</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- ABA 2: ESP -->
-                <div class="tab-content" id="esp">
-                    <div class="control-group">
-                        <div class="control-row">
-                            <div>
-                                <div class="control-label">Ativar ESP Box</div>
-                                <div class="control-desc">Exibir marcadores na arena</div>
-                            </div>
-                            <label class="switch">
-                                <input type="checkbox" id="espToggle" onchange="toggleEspSimulation()">
-                                <span class="slider"></span>
-                            </label>
-                        </div>
-                    </div>
-
-                    <div class="control-group">
-                        <div class="control-label" style="margin-bottom: 8px;">Estilo de Informação</div>
-                        <div class="chip-group">
-                            <div class="chip selected" onclick="selectChip(this, 'esp')">Distância</div>
-                            <div class="chip" onclick="selectChip(this, 'esp')">Linhas</div>
-                            <div class="chip" onclick="selectChip(this, 'esp')">Caixa 3D</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- ABA 3: NO RECOIL -->
-                <div class="tab-content" id="recoil">
-                    <div class="control-group">
-                        <div class="control-row">
-                            <div>
-                                <div class="control-label">Estabilizador No Recoil</div>
-                                <div class="control-desc">Redução de dispersão de tiro</div>
-                            </div>
-                            <label class="switch">
-                                <input type="checkbox" id="recoilToggle">
-                                <span class="slider"></span>
-                            </label>
-                        </div>
-                    </div>
-
-                    <div class="control-group">
-                        <div class="control-row">
-                            <div>
-                                <div class="control-label">Ajuste de Estabilidade</div>
-                                <div class="control-desc" id="stabValue">Nível: 80%</div>
-                            </div>
-                        </div>
-                        <input type="range" min="1" max="100" value="80" class="range-slider" oninput="updateStab(this.value)">
-                    </div>
-                </div>
-
-            </div>
-
-            <!-- Rodapé -->
-            <div class="panel-footer">
-                <div><span class="status-dot"></span>Status: Pronto (Simulação)</div>
-                <div>v2.6 iOS Pro</div>
-            </div>
+    <div id="login">
+        <div class="box">
+            <h1>GRXSENSI VIP</h1>
+            <input type="password" id="key" class="inp" placeholder="CHAVE VIP" autocomplete="off">
+            <button class="btn" onclick="val()">AUTENTICAR</button>
+            <div id="err" class="err">CHAVE INVÁLIDA!</div>
         </div>
     </div>
-
+    <div id="menu">
+        <div class="hdr">
+            <h2>GRXSENSI ENGINE</h2>
+            <p>SECURE PROTOCOL v4.2</p>
+        </div>
+        <div class="tabs">
+            <button class="tb active" onclick="tb(0)">1. REGEDIT</button>
+            <button class="tb" onclick="tb(1)">2. HARDWARE</button>
+            <button class="tb" onclick="tb(2)">3. ANTI-LATÊNCIA</button>
+        </div>
+        <div class="cnt active" id="c0">
+            <div class="group">
+                <div class="lbl"><span>Sensibilidade Infinita (DPI)</span><label class="switch"><input type="checkbox" onchange="lg('Sensibilidade Infinita (DPI)', this.checked)"><span class="slider"></span></label></div>
+                <div class="desc">Remove aceleração padrão do sistema.</div>
+            </div>
+            <div class="group">
+                <div class="lbl"><span>Macro Regedit Headshot</span><label class="switch"><input type="checkbox" onchange="lg('Macro Regedit Headshot', this.checked)"><span class="slider"></span></label></div>
+                <div class="desc">Alinha pixels para evitar over-aim.</div>
+            </div>
+            <div class="group">
+                <div class="lbl"><span>Zero Recoil Mod</span><label class="switch"><input type="checkbox" onchange="lg('Zero Recoil Mod', this.checked)"><span class="slider"></span></label></div>
+                <div class="desc">Estabiliza tremedeira lateral de SMG/AR.</div>
+            </div>
+        </div>
+        <div class="cnt" id="c1">
+            <div class="group">
+                <div class="lbl"><span>FPS Sensibilidade: <strong id="fv" style="color:var(--cyan)">120Hz</strong></span></div>
+                <input type="range" min="60" max="140" value="120" class="range" oninput="uf(this.value)">
+            </div>
+            <div class="group">
+                <div class="lbl"><span>Sistema</span></div>
+                <select class="sel"><option>Android</option><option>iPhone (iOS)</option></select>
+            </div>
+            <div class="group">
+                <div class="lbl"><span>Modelo do Dispositivo</span></div>
+                <input type="text" id="dev" class="txt" placeholder="Ex: ROG Phone / iPhone 14">
+            </div>
+            <button class="abtn" onclick="scan()">VERIFICAR HARDWARE & GERAR</button>
+            <div id="res" class="res">
+                <strong>[CALIBRAÇÃO PRONTA]</strong><br>
+                Geral: <span id="rg">98</span>% | Red Dot: <span id="rr">95</span>%<br>
+                Mira 2x: <span id="r2">92</span>% | Mira 4x: <span id="r4">90</span>%<br>
+                Botão Atirar: <span id="rb">44</span>%
+            </div>
+        </div>
+        <div class="cnt" id="c2">
+            <div class="group">
+                <div class="lbl"><span>Supressão de Toque Avançada</span><label class="switch"><input type="checkbox" onchange="lg('Supressão de Toque Avançada', this.checked)"><span class="slider"></span></label></div>
+                <div class="desc">Calibração TalkBack / iOS Touch.</div>
+            </div>
+            <div class="group">
+                <div class="lbl"><span>Touch Booster VIP</span><label class="switch"><input type="checkbox" onchange="lg('Touch Booster VIP', this.checked)"><span class="slider"></span></label></div>
+                <div class="desc">Acelera polling rate do painel touch.</div>
+            </div>
+            <div class="group">
+                <div class="lbl"><span>Logs em Tempo Real</span></div>
+                <div id="logs" class="logs"><div class="lline">[05:00] Engine pronta.</div></div>
+            </div>
+        </div>
+        <div id="scan">
+            <div class="stxt">AGUARDE... COLETANDO VETORES DE SENSIBILIDADE DO HARDWARE...</div>
+            <div class="pbar-c"><div id="pb" class="pbar"></div></div>
+        </div>
+    </div>
     <script>
-        // Função para abrir/fechar o menu flutuante
-        function togglePanel() {
-            const panel = document.getElementById('proPanel');
-            panel.classList.toggle('hidden');
-        }
-
-        // Sistema de Abas
-        function switchTab(evt, tabName) {
-            const contents = document.getElementsByClassName('tab-content');
-            for (let c of contents) {
-                c.classList.remove('active');
-            }
-
-            const tabs = document.getElementsByClassName('tab-btn');
-            for (let t of tabs) {
-                t.classList.remove('active');
-            }
-
-            document.getElementById(tabName).classList.add('active');
-            evt.currentTarget.classList.add('active');
-        }
-
-        // Seleção de Chips (Grupos)
-        function selectChip(element, groupClass) {
-            const parent = element.parentElement;
-            const chips = parent.getElementsByClassName('chip');
-            for (let c of chips) {
-                c.classList.remove('selected');
-            }
-            element.classList.add('selected');
-        }
-
-        // Atualização de Valores na Interface
-        function updateSens(val) {
-            document.getElementById('sensValue').innerText = `Valor: ${val}%`;
-        }
-
-        function updateStab(val) {
-            document.getElementById('stabValue').innerText = `Nível: ${val}%`;
-        }
-
-        // Simulação Visual do ESP na Arena
-        function toggleEspSimulation() {
-            const isChecked = document.getElementById('espToggle').checked;
-            const target1 = document.getElementById('target1');
-            const target2 = document.getElementById('target2');
-
-            if (isChecked) {
-                target1.classList.add('active');
-                target2.classList.add('active');
+        function val() {
+            if(document.getElementById('key').value.trim() === 'GRXSENSIQ1111') {
+                document.getElementById('login').style.opacity = '0';
+                setTimeout(() => { document.getElementById('login').style.display = 'none'; document.getElementById('menu').style.display = 'flex'; }, 400);
             } else {
-                target1.classList.remove('active');
-                target2.classList.remove('active');
+                let e = document.getElementById('err'); e.style.display = 'block'; setTimeout(() => e.style.display = 'none', 2500);
             }
         }
-
-        function updateAimbotState() {
-            // Feedback visual adicional opcional ao ativar o aimbot
-            const isChecked = document.getElementById('aimbotToggle').checked;
-            console.log("Aimbot simulation state:", isChecked);
+        function tb(i) {
+            document.querySelectorAll('.tb').forEach((b, idx) => b.classList.toggle('active', idx==i));
+            document.querySelectorAll('.cnt').forEach((c, idx) => c.classList.toggle('active', idx==i));
         }
+        function uf(v) { document.getElementById('fv').innerText = v + 'Hz'; }
+        function lg(n, s) {
+            let l = document.getElementById('logs'), t = new Date().toTimeString().split(' ')[0], d = document.createElement('div');
+            d.className = 'lline'; d.innerText = `[${t}] ${n} -> ~ (${s?'ATIVADO':'DESATIVADO'})`;
+            l.appendChild(d); l.scrollTop = l.scrollHeight;
+        }
+        function scan() {
+            let m = document.getElementById('dev').value.trim();
+            if(!m) { alert('Insira o modelo do celular.'); return; }
+            let s = document.getElementById('scan'), p = document.getElementById('pb');
+            s.style.display = 'flex'; p.style.width = '0%';
+            let w = 0, t = setInterval(() => {
+                w += 2; p.style.width = w + '%';
+                if(w >= 100) {
+                    clearInterval(t);
+                    setTimeout(() => {
+                        s.style.display = 'none';
+                        let seed = m.length;
+                        document.getElementById('rg').innerText = 90 + (seed % 10);
+                        document.getElementById('rr').innerText = 88 + ((seed*3) % 11);
+                        document.getElementById('r2').innerText = 85 + ((seed*5) % 13);
+                        document.getElementById('r4').innerText = 86 + ((seed*7) % 12);
+                        document.getElementById('rb').innerText = 38 + (seed % 10);
+                        document.getElementById('res').style.display = 'block';
+                        lg('Hardware Scan', true);
+                    }, 300);
+                }
+            }, 50);
+        }
+        document.getElementById('key').addEventListener('keypress', e => { if(e.key==='Enter') val(); });
     </script>
 </body>
 </html>
